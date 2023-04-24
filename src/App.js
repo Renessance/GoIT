@@ -1,23 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import Alert from "./Alert";
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Alert outlined={true} variant="info">Info</Alert>
+      <Alert outlined variant="success">Success</Alert>
+      <hr/>
+      <Alert elevated variant="warning">Warning</Alert>
+      <Alert elevated variant="error">Error</Alert>
     </div>
   );
 }
