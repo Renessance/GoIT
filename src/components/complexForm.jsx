@@ -1,74 +1,112 @@
-import {Component} from "react";
+import React, {Component} from 'react';
 
-const INITIAL_STATE = {
-  login: "",
-  email: "",
-  password: "",
-};
+class SimpleCounter extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      count: 0,
+      userName: "",
+      secondsElapsed: 0,
+      isValid: false
+    };
+  }
 
-class ComplexForm extends Component {
-  state = { ...INITIAL_STATE };
-
-  // Для всіх інпутів створюємо один обробник
-  // Розрізняти інпути будемо за атрибутом name
-  handleChange = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
+  incrementCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count + 1 };
+    });
+  };
+  decrementCount = () => {
+    this.setState((prevState) => {
+      return { count: prevState.count - 1 };
+    });
+  };
+  handleChange = (event) => {
+    this.setState((prevState) => {
+      return { name: event.target.value};
+    });
   };
 
-  handleSubmit = evt => {
-    evt.preventDefault();
+  // componentDidMount() {
+  //   console.log('componentDidMount')
+  // }
+// componentDidUpdate(prevProps, prevState, snapshot) {
+//   console.log('Updating', )
+// }
 
-    const { login, email, password } = this.state;
-    console.log(`Login: ${login}, Email: ${email}, Password: ${password}`);
-    this.props.onSubmit({ ...this.state });
-    this.reset();
-  };
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('componentDidUpdate', )
+  //   // Виповнюєм дію, якщо значення `count` змінилось
+  //   if (this.state.count !== prevState.count) {
+  //     console.log('Свойство count было обновлено:', this.state.count);
+  //   }
+  // }
 
-  reset = () => {
-    this.setState({ ...INITIAL_STATE });
-  };
+  // shouldComponentUpdate(prevProps, nextState) {
+  //   // console.log('prevProps', prevProps)
+  //   // console.log('nextState', nextState)
+  //   // console.log('this.state.count', this.state.count)
+  //   if (nextState.count !== this.state.count) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // componentWillUnmount() {
+  //   console.log('componentWillUnmount')
+  // }
+
+  //Timer
+  componentDidMount() {
+    // Запускаем таймер, используя setInterval
+    this.intervalId = setInterval(() => {
+      this.setState((prevState) => ({
+        secondsElapsed: prevState.secondsElapsed + 1
+      }));
+    }, 1000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  // Validation
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('nextState', prevState)
+  //   const { userName } = prevState;
+  //   const isValid = this.validateName(userName);
+  //
+  //   if (isValid !== this.state.isValid) {
+  //     this.setState({ isValid });
+  //     return true;
+  //   }
+  //
+  //   return prevState.userName !== this.state.userName;
+  // }
+  //
+  // validateName = (name) => {
+  //   const nameRegex = /^.{3,15}$/;
+  //   return nameRegex.test(name);
+  // };
+  //
+  // handleChange = (event) => {
+  //   this.setState({ userName: event.target.value });
+  // };
 
   render() {
-    const { login, email, password } = this.state;
-    console.log('state', this.state)
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name
-          <input
-            type="text"
-            placeholder="Enter login"
-            name="login"
-            value={login}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          Email
-          <input
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={email}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            placeholder="Enter password"
-            name="password"
-            value={password}
-            onChange={this.handleChange}
-          />
-        </label>
 
-        <button type="submit">Sign up as {login}</button>
-      </form>
+      <div>
+        <input type="text" name="userName" onChange={this.handleChange}/>
+        <h1>Счетчик: {this.state.count}</h1>
+        <button onClick={this.incrementCount}>+</button>
+        <button onClick={this.decrementCount}>-</button>
+        <p/>
+        <button disabled={!this.state.isValid}>Submit</button>
+        <p>Пройшло секунд: {this.state.secondsElapsed}</p>
+      </div>
     );
   }
 }
 
-export default ComplexForm
+export default SimpleCounter;
